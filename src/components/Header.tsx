@@ -6,7 +6,7 @@ import React, { useEffect, useRef, useState } from 'react';
 const Nav = styled(motion.header)`
   display: flex;
   /* align-items: center; */
-  background: rgba(0, 0, 0, 1);
+  background: rgba(0, 0, 0, 0.4);
   padding: 0 1em;
   position: fixed;
   left: 0;
@@ -56,6 +56,7 @@ const Search = styled(motion.form)`
   padding: 0.25em 0.5em;
   position: relative;
   width: 20px;
+  border: 1px solid rgba(255, 255, 255, 0);
   border-radius: ${(props) => props.theme.bdRadius};
 `;
 
@@ -120,11 +121,11 @@ const Header = () => {
     scrollY.onChange(() => {
       if (scrollY.get() > 80) {
         navAni.start({
-          background: 'rgba(0, 0, 0, 0)',
+          background: 'rgba(0, 0, 0, 1)',
         });
       } else {
         navAni.start({
-          background: 'rgba(0, 0, 0, 1)',
+          background: 'rgba(0, 0, 0, .4)',
         });
       }
     });
@@ -138,7 +139,8 @@ const Header = () => {
 
     searchAni.start({
       width: '220px',
-      background: 'rgba(55, 55, 55, 0.4)',
+      background: 'rgba(55, 55, 55, 0.8)',
+      border: '1px solid rgba(255, 255, 255, 1)',
     });
 
     searchInputElement.current?.focus();
@@ -146,6 +148,7 @@ const Header = () => {
     searchAni.start({
       width: '20px',
       background: 'rgba(0, 0, 0, 0)',
+      border: '1px solid rgba(255, 255, 255, 0)',
     });
   }
 

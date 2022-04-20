@@ -6,7 +6,7 @@ import { useSetRecoilState } from 'recoil';
 import styled from 'styled-components';
 import { makeImagePath } from 'utils';
 import Loader from './Loader';
-import { motion } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
 
 const ModalOverlay = styled(motion.div)`
   background: rgba(0, 0, 0, 0.4);
@@ -27,7 +27,8 @@ const ModalBox = styled(motion.div)`
   top: 1em;
   transform: translateX(-50%);
   z-index: 30;
-  width: 50vw;
+  max-width: 569px;
+  width: 100%;
   min-height: 700px;
   padding-bottom: 2em;
   .movie-txt-container {
@@ -44,7 +45,7 @@ const ModalBox = styled(motion.div)`
   }
 `;
 
-const BtnClose = styled.a`
+const BtnClose = styled(motion.a)`
   width: 35px;
   height: 35px;
   position: absolute;
@@ -94,15 +95,19 @@ const Modal = ({ id }: IModalProps) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
-        exit={{ opacity: 0 }}
+        exit={{ opacity: 0, transition: { delay: 0.2 } }}
       />
       <ModalBox
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.2 }}
-        exit={{ opacity: 0 }}
+        exit={{ opacity: 0, transition: { delay: 0.2 } }}
       >
-        <BtnClose className="btn-close" onClick={modalHide}>
+        <BtnClose
+          className="btn-close"
+          onClick={modalHide}
+          exit={{ scale: [0.8, 1], transition: { duration: 0.2 } }}
+        >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
             <path d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z" />
           </svg>
