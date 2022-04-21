@@ -18,10 +18,10 @@ const SliderBox = styled(motion.div)`
 
 const SliderRow = styled(motion.div)<{ dataLength: number }>`
   width: ${(props) =>
-    `calc((${props.theme.movieSize} + 10px) * ${props.dataLength} + 10px)`};
+    `calc((${props.theme.movieSize} + 10px) * ${props.dataLength} + 75px)`};
   display: flex;
   gap: 10px;
-  padding: 0 10px;
+  padding: 0 40px;
   flex-wrap: nowrap;
 `;
 
@@ -30,7 +30,7 @@ const Title = styled(motion.h2)`
   position: relative;
   font-size: 1.75rem;
   font-weight: 700;
-  padding-left: 0.5em;
+  padding-left: 50px;
   margin: 0;
 `;
 
