@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Loader from 'components/Loader';
 import { makeImagePath } from 'utils';
 import { motion } from 'framer-motion';
+import React from 'react';
 
 const BannerBox = styled(motion.div)`
   position: relative;
@@ -28,6 +29,7 @@ const BannerImg = styled.div`
   padding-bottom: 56.25%;
   position: relative;
   z-index: 0;
+  overflow: hidden;
   .cover {
     position: absolute;
     width: 100%;
@@ -60,6 +62,9 @@ interface BannerProps {
 }
 
 const Banner = ({ isLoading, data }: BannerProps) => {
+  const dataLength: number = data?.results.length || 0;
+  const dataRandomIndex = Math.floor(Math.random() * dataLength);
+
   return (
     <BannerContainer>
       {isLoading ? (
@@ -78,12 +83,18 @@ const Banner = ({ isLoading, data }: BannerProps) => {
         >
           <BannerImg>
             <div className="cover"></div>
-            <img src={makeImagePath(data.results[0].backdrop_path)} />
+            <img
+              src={makeImagePath(data.results[dataRandomIndex].backdrop_path)}
+            />
           </BannerImg>
           {data ? (
             <div className="txt-container">
-              <div className="txt__title">{data.results[0].title}</div>
-              <div className="txt__description">{data.results[0].overview}</div>
+              <div className="txt__title">
+                {data.results[dataRandomIndex].title}
+              </div>
+              <div className="txt__description">
+                {data.results[dataRandomIndex].overview}
+              </div>
             </div>
           ) : null}
         </BannerBox>
@@ -92,4 +103,4 @@ const Banner = ({ isLoading, data }: BannerProps) => {
   );
 };
 
-export default Banner;
+export default React.memo(Banner);

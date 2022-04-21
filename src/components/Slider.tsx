@@ -13,7 +13,7 @@ const SliderBox = styled(motion.div)`
   width: 100%;
   overflow: hidden;
   padding: 2em 0;
-  /* overflow-y: visible; */
+  margin-bottom: 2.5em;
 `;
 
 const SliderRow = styled(motion.div)<{ dataLength: number }>`
@@ -25,7 +25,20 @@ const SliderRow = styled(motion.div)<{ dataLength: number }>`
   flex-wrap: nowrap;
 `;
 
-const Slider = ({ results }: MoviesData) => {
+const Title = styled(motion.h2)`
+  z-index: 2;
+  position: relative;
+  font-size: 1.75rem;
+  font-weight: 700;
+  padding-left: 0.5em;
+  margin: 0;
+`;
+
+interface SliderPorps extends MoviesData {
+  title: string;
+}
+
+const Slider = ({ results, title }: SliderPorps) => {
   // const [isHover, setIsHover] = useState(false);
 
   const constraintsRef = useRef(null);
@@ -43,28 +56,38 @@ const Slider = ({ results }: MoviesData) => {
   let dragging = false;
 
   return (
-    <SliderBox ref={constraintsRef}>
-      <SliderRow
-        drag="x"
-        dragConstraints={constraintsRef}
-        dragMomentum={false}
-        dragElastic={0}
-        dataLength={results.length}
-        onDragStart={() => (dragging = true)}
-        onDragTransitionEnd={() => (dragging = false)}
+    <>
+      <Title
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.7 }}
       >
-        {results.map((movie: MovieProps, movieIndex: number) => {
-          return (
-            <Movie
-              key={movie.id}
-              {...movie}
-              movieIndex={movieIndex}
-              movieOnClick={movieOnClick}
-            />
-          );
-        })}
-      </SliderRow>
-    </SliderBox>
+        {title}
+      </Title>
+      <SliderBox ref={constraintsRef}>
+        <SliderRow
+          drag="x"
+          dragConstraints={constraintsRef}
+          dragMomentum={false}
+          dragElastic={0}
+          dataLength={results.length}
+          onDragStart={() => (dragging = true)}
+          onDragTransitionEnd={() => (dragging = false)}
+        >
+          {results.map((movie: MovieProps, movieIndex: number) => {
+            return (
+              <Movie
+                key={movie.id}
+                {...movie}
+                movieIndex={movieIndex}
+                movieOnClick={movieOnClick}
+                movieSize={'280px'}
+              />
+            );
+          })}
+        </SliderRow>
+      </SliderBox>
+    </>
   );
 };
 

@@ -1,4 +1,4 @@
-import { Link, useMatch } from 'react-router-dom';
+import { Link, useMatch, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion, useAnimation, useViewportScroll } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
@@ -108,10 +108,11 @@ const searchIconVariants = {
 
 const Header = () => {
   const [searching, setSearching] = useState(false);
+  const [keyword, setKeyword] = useState('');
   const searchInputElement = useRef<HTMLInputElement>(null);
 
   const homeMatch = useMatch('/');
-  const tvMatch = useMatch('/tv');
+  // const tvMatch = useMatch('/tv');
 
   // 스크롤
   const navAni = useAnimation();
@@ -129,35 +130,48 @@ const Header = () => {
         });
       }
     });
-  }, [scrollY, navAni]);
+
+    if (searching) {
+      searchIconAni.start('toggle');
+
+      searchAni.start({
+        width: '220px',
+        background: 'rgba(55, 55, 55, 0.8)',
+        border: '1px solid rgba(255, 255, 255, 1)',
+      });
+
+      searchInputElement.current?.focus();
+    } else {
+      searchAni.start({
+        width: '20px',
+        background: 'rgba(0, 0, 0, 0)',
+        border: '1px solid rgba(255, 255, 255, 0)',
+      });
+    }
+  }, [scrollY, navAni, searching]);
 
   // 이벤트를 트리거로 사용가능.
   const searchAni = useAnimation();
   const searchIconAni = useAnimation();
-  if (searching) {
-    searchIconAni.start('toggle');
-
-    searchAni.start({
-      width: '220px',
-      background: 'rgba(55, 55, 55, 0.8)',
-      border: '1px solid rgba(255, 255, 255, 1)',
-    });
-
-    searchInputElement.current?.focus();
-  } else {
-    searchAni.start({
-      width: '20px',
-      background: 'rgba(0, 0, 0, 0)',
-      border: '1px solid rgba(255, 255, 255, 0)',
-    });
-  }
 
   const onBlur = () => {
     setSearching((prev) => !prev);
   };
 
+  const onChange = (event: React.FormEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    setKeyword(event.currentTarget.value);
+  };
+
+  const navigate = useNavigate();
+
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    // keyword 가 한글자도 없다면 return
+    if (!keyword) return;
+
+    navigate('/search?k=' + keyword);
   };
 
   return (
@@ -184,10 +198,10 @@ const Header = () => {
             <Link to="/">Home</Link>
             {homeMatch && <UnderLine layoutId="gnbUnderLine" />}
           </li>
-          <li>
+          {/* <li>
             <Link to="/tv">TV</Link>
             {tvMatch && <UnderLine layoutId="gnbUnderLine" />}
-          </li>
+          </li> */}
         </Gnb>
         <Search
           onSubmit={onSubmit}
@@ -195,6 +209,7 @@ const Header = () => {
           transition={{ type: 'liner', delay: 0.2 }}
         >
           <SearchIcon
+            type="button"
             onClick={() => setSearching((prev) => !prev)}
             variants={searchIconVariants}
             animate={searchIconAni}
@@ -204,9 +219,12 @@ const Header = () => {
             </svg>
           </SearchIcon>
           <SearchInput
+            name="k"
+            value={keyword}
             placeholder="검색"
             ref={searchInputElement}
             onBlur={onBlur}
+            onChange={onChange}
           />
         </Search>
       </Nav>
@@ -214,4 +232,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default React.memo(Header);

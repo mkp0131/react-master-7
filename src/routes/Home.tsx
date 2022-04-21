@@ -1,4 +1,9 @@
-import { getMovieNowPlaying } from 'api';
+import {
+  getMovieNowPlaying,
+  getMoviePopular,
+  getMovieTopRate,
+  getMovieUpcoming,
+} from 'api';
 import Banner from 'components/Banner';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
@@ -11,21 +16,47 @@ import ModalContainer from 'components/ModalContainer';
 
 const MainContents = styled.div`
   margin-top: -10vw;
+  margin-bottom: 5vh;
 `;
 
 const Home = () => {
-  const { isLoading: isLoading, data: movieNowData } = useQuery(
-    'movieNowPlaying',
+  const { isLoading: isNowLoading, data: movieNowData } = useQuery(
+    ['movie', 'NowPlaying'],
     () => getMovieNowPlaying()
+  );
+
+  const { isLoading: isPopularLoading, data: moviePopularData } = useQuery(
+    ['movie', 'Popular'],
+    () => getMoviePopular()
+  );
+
+  const { isLoading: isUpcomingLoading, data: movieUpcomingData } = useQuery(
+    ['movie', 'Upcoming'],
+    () => getMovieUpcoming()
+  );
+
+  const { isLoading: isTopRateLoading, data: movieTopRateData } = useQuery(
+    ['movie', 'TopRate'],
+    () => getMovieTopRate()
   );
 
   return (
     <>
-      <Banner isLoading={isLoading} data={movieNowData} />
+      <Banner isLoading={isNowLoading} data={movieNowData} />
       <MainContents>
-        {isLoading ? null : <Slider {...movieNowData} />}
+        {isNowLoading ? null : (
+          <Slider {...movieNowData} title={'현재 상영작'} />
+        )}
+        {isUpcomingLoading ? null : (
+          <Slider {...movieUpcomingData} title={'상영 예정작'} />
+        )}
+        {isPopularLoading ? null : (
+          <Slider {...moviePopularData} title={'인기 영화'} />
+        )}
+        {isTopRateLoading ? null : (
+          <Slider {...movieTopRateData} title={'최고 평점 영화'} />
+        )}
       </MainContents>
-      <ModalContainer />
     </>
   );
 };

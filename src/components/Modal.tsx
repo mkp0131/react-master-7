@@ -54,6 +54,7 @@ const BtnClose = styled(motion.a)`
   z-index: 31;
   cursor: pointer;
   background: #000;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
   padding: 5px;
   border-radius: 50%;
   svg {
@@ -68,6 +69,7 @@ const BtnClose = styled(motion.a)`
 const BgBox = styled.div<{ bg: string }>`
   padding-bottom: 56.25%;
   position: relative;
+  background: ${(props) => props.theme.boxColor};
   background-image: ${(props) => `url(${makeImagePath(props.bg, 'w1280')})`};
   background-size: cover;
   background-position: center;

@@ -8,7 +8,6 @@ const GlobalStyle = createGlobalStyle`
     background: ${(props) => props.theme.bgColor};
     color: ${(props) => props.theme.fontColor};
     font-size: 16px;
-    height: 200vh;
   }
   * {
     box-sizing: border-box;

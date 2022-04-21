@@ -3,17 +3,29 @@ import { motion, useAnimation } from 'framer-motion';
 import { makeImagePath } from 'utils';
 import { MovieProps } from 'api';
 
-const MovieBox = styled(motion.a)`
-  width: ${(props) => props.theme.movieSize};
+const MovieScaleBox = styled(motion.div)`
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: ${(props) => props.theme.boxColor};
+  position: relative;
+  padding-bottom: 56.25%;
+`;
+
+const MovieBox = styled(motion.a)<{ movieSize: string }>`
+  width: ${(props) => props.movieSize};
   flex-shrink: 0;
   cursor: pointer;
   position: relative;
-  &:first-child {
-    transform-origin: 0%;
+  /* &:first-child {
+    ${MovieScaleBox} {
+      transform-origin: 0%;
+    }
   }
   &:last-child {
-    transform-origin: 100%;
-  }
+    ${MovieScaleBox} {
+      transform-origin: 100%;
+    }
+  } */
   .movie__title {
     position: absolute;
     bottom: 1em;
@@ -21,14 +33,6 @@ const MovieBox = styled(motion.a)`
     background: rgba(0, 0, 0, 0.6);
     padding: 1em;
   }
-`;
-
-const MovieScaleBox = styled(motion.div)`
-  border-radius: 10px;
-  overflow: hidden;
-  background-color: ${(props) => props.theme.boxColor};
-  position: relative;
-  padding-bottom: 56.25%;
 `;
 
 const ImgBox = styled.img`
@@ -42,6 +46,7 @@ const ImgBox = styled.img`
 interface IMovieProps extends MovieProps {
   movieIndex: number;
   movieOnClick(event: React.MouseEvent<HTMLAnchorElement>, id: number): void;
+  movieSize?: string;
 }
 
 const Movie = ({
@@ -51,6 +56,7 @@ const Movie = ({
   backdrop_path,
   movieIndex,
   movieOnClick,
+  movieSize,
 }: IMovieProps) => {
   const movieHoverAni = useAnimation();
 
@@ -79,6 +85,7 @@ const Movie = ({
         transition: { delay: 0.5 + 0.1 * movieIndex },
       }}
       onClick={(event) => movieOnClick(event, id)}
+      movieSize={movieSize || '100%'}
     >
       <MovieScaleBox
         animate={movieHoverAni}
