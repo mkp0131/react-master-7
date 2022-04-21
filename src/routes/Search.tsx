@@ -57,7 +57,7 @@ const Search = () => {
               paddingTop: '3em',
             }}
           />
-        ) : movieSearchData.results > 0 ? (
+        ) : movieSearchData.total_results > 0 ? (
           movieSearchData.results.map(
             (movie: MovieProps, movieIndex: number) => {
               return (
